@@ -1,0 +1,10 @@
+{
+    "command_line": "$python -m neubot_speedtest -vf -A $address",
+    "directory": "./usr/share/neubot-speedtest",
+    "params": {
+        "address": {
+            "label": "Name of mlab sliver to use",
+            "regexp": "^[a-zA-Z0-9_.-]+$"
+        }
+    }
+}
