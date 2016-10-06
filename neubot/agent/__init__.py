@@ -44,6 +44,7 @@ def run(address, port):
     api_config = ApiConfig()
     api.putChild("config", api_config)
     api_config.director = director
+    api_config.state = state
 
     api_data = ApiData()
     api.putChild("data", api_data)

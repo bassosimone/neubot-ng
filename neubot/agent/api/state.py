@@ -28,7 +28,7 @@ class ApiState(resource.Resource):
         tsnap = int(request.args.get("t", ["0"])[0])
         indent_level = parse_debug(request)
 
-        if tsnap < self.state.current_tsnap:
+        if self.state.current_tsnap > tsnap:
             return self.state.serialize()
 
         deferred = defer.Deferred()
@@ -42,7 +42,8 @@ class ApiState(resource.Resource):
             if not deferred.called:
                 deferred.callback(None)
 
-        reactor.callLater(5.0, do_timeout)
+        reactor.callLater(60.0, do_timeout)
         deferred.addCallback(finish_response)
+        self.state.register(deferred)
 
         return server.NOT_DONE_YET

@@ -20,6 +20,7 @@ class ApiConfig(resource.Resource):
     """ Implements the /api/config endpoint """
 
     director = None  # set to a Director instance during configuration
+    state = None  # set to a State instance during configuration
     isLeaf = True
 
     def render_GET(self, request):
@@ -40,4 +41,9 @@ class ApiConfig(resource.Resource):
         for name in request.args:
             new_settings[name] = request.args[name][0]
         self.director.update_config(new_settings)  # Would raise on check error
+
+        # Trigger a `config` event such that the likely waiting comet
+        # connection is woken up and receives the update
+        self.state.update("config", self.director.get_config())
+
         return "{}"
