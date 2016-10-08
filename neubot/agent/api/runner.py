@@ -55,7 +55,7 @@ class ApiRunner(resource.Resource):
             logging.debug("scheduling next check for %s", test_name)
             reactor.callLater(1.0, monitor_test)
 
-        self.state.update("test", record)
+        self.state.update("test", {})
         reactor.callLater(1.0, monitor_test)
 
         if not streaming:
