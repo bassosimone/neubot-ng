@@ -242,15 +242,18 @@ def main(args):
     ''' Main function '''
 
     try:
-        options, arguments = getopt.getopt(args[1:], 'f:nv')
+        options, arguments = getopt.getopt(args[1:], 'f:nv', ["force-privacy"])
     except getopt.error:
         sys.exit(USAGE)
 
     database_path = system.get_default_database_path()
     auto_discover = True
+    force_privacy = False
     for name, value in options:
         if name == '-f':
             database_path = value
+        elif name == "--force-privacy":
+            force_privacy = True
         elif name == '-n':
             auto_discover = False
         elif name == '-v':
@@ -259,8 +262,15 @@ def main(args):
     if len(arguments) != 1 and len(arguments) != 2:
         sys.exit(USAGE)
 
-    DATABASE.set_path(database_path)
+    DATABASE.set_path(":memory:")
     CONFIG.merge_database(DATABASE.connection())
+
+    if force_privacy:
+        CONFIG.merge_api({
+            "privacy.informed": 1,
+            "privacy.can_collect": 1,
+            "privacy.can_publish": 1,
+        }, DATABASE.dbc);
 
     if len(arguments) == 2:
         RUNNER_TESTS.update({arguments[0]: [arguments[1]]})
