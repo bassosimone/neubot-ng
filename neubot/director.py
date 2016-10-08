@@ -102,6 +102,7 @@ class Director(object):
             record = next(self._running)
         except StopIteration:
             logging.warning("The test already terminated")
+            self._running = None
             return  # Happens, for example, if exec() fails
         if record["status"] != "running":
             self._running = None
