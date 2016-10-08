@@ -97,7 +97,7 @@ class RunnerCore(object):
                 self.queue.append(('mlab-ns', deferred2, {'policy': 'random'}))
 
             elif test == "bittorrent" or test == "speedtest":
-                self.queue.append(('rendezvous', deferred2, None))
+                self.queue.append(('mlab-ns', deferred2, None))
 
             else:
                 try:
