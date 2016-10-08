@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Exec=@BINDIR@/neubot notifier
+Hidden=False
+NoDisplay=False
+X-GNOME-Autostart-enabled=true
+Name=Neubot notifier

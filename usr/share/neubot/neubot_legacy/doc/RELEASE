@@ -1,0 +1,89 @@
+Release procedure
+'''''''''''''''''
+
+:Version: 1.4 of 2013/10/27
+:Authors: Simone Basso
+:Documents: the release procedure
+
+#. Build a release using the following commands::
+
+     make release
+     sudo ./MacOS/makepkg.py
+     Win32/setup.py
+
+   The first command runs on any UNIX operating system and creates
+   a Debian and source release.  The second runs on MacOSX and
+   creates a MacOS release.  The third runs on Windows only and
+   creates a Windows release.
+   
+   [TODO: this step is out-of-date]
+
+#. Run regression tests.  You need access to a Debian machine
+   where you are root and where Neubot is not installed.
+
+#. Autoupdate
+
+    #. Make sure that Neubot autoupdates on a Debian machine
+       where it was already installed.
+
+    #. Make sure that Neubot autoupdates on a MacOS machine
+       where it was already installed.
+
+    #. Make sure that Neubot autoupdates on a Windows machine
+       where it was already installed.
+
+#. Make sure that Windows installer is not identified as a
+   virus by <http://www.virustotal.com/>.
+
+#. Deploy the new Neubot version on a restricted set of
+   Measurement Lab nodes (3-6 slivers).
+
+#. Deploy the new Neubot version at the master server and
+   make sure it DOES NOT advertises the new version via
+   rendezvous.
+
+#. Install Neubot on a Debian machine and:
+
+     #. make sure it prompts for privacy settings during the
+        install;
+
+     #. make sure it prompts for privacy settings after a
+        reboot;
+
+     #. make sure that the following commands work properly:
+        `bittorrent`, `browser`, `database`, `notifier`,
+        `privacy`, `raw`, `speedtest`, `viewer`;
+
+#. Install Neubot on a MacOS machine and:
+
+     #. make sure it prompts for privacy settings during the
+        install;
+
+     #. make sure that the following commands work properly:
+        `bittorrent`, `browser`, `database`, `notifier`,
+        `privacy`, `raw`, `speedtest`, `viewer`;
+
+#. Install and upgrade Neubot on a Windows machine and:
+
+     #. make sure it prompts for privacy settings after the
+        install;
+
+     #. make sure it prompts for privacy settings after a
+        reboot;
+
+     #. make sure that the following commands work properly:
+        `bittorrent`, `browser`, `database`, `notifier`,
+        `privacy`, `raw`, `speedtest`, `viewer`;
+
+#. Mass deploy Neubot on all Measurement Lab nodes.
+
+#. Read the manual page, make sure it's still relevant and
+   that there are no changes to be performed.
+
+#. Read wiki/errata and make sure all entries are still up
+   to date with reality.
+
+#. Announce the availability of the new version.
+
+#. Deploy the new Neubot version at the master server and
+   make sure it advertises the update via rendezvous.

@@ -1,0 +1,128 @@
+#!/usr/bin/env python
+
+#
+# Copyright (c) 2011 Simone Basso <bassosimone@gmail.com>,
+#  NEXA Center for Internet & Society at Politecnico di Torino
+#
+# This file is part of Neubot <http://www.neubot.org/>.
+#
+# Neubot is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Neubot is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Neubot.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+''' Convenience script to inspect and monitor the usage of
+    memory of a Neubot server.  Works only from the same host
+    where the instance of the server is running. '''
+
+import getopt
+import httplib
+import sys
+import time
+
+if __name__ == '__main__':
+    sys.path.insert(0, '.')
+
+from neubot.compat import json
+
+def main():
+
+    ''' Main of the convenience script '''
+
+    try:
+        options, arguments = getopt.getopt(sys.argv[1:], '1cr')
+    except getopt.error:
+        sys.exit('Usage: debugmem [-1cr]')
+    if arguments:
+        sys.exit('Usage: debugmem [-1cr]')
+
+    cflag = False
+    onceflag = False
+    rflag = False
+    for tpl in options:
+        if tpl[0] == '-1':
+            onceflag = True
+        elif tpl[0] == '-c':
+            cflag = True
+        elif tpl[0] == '-r':
+            rflag = True
+
+    firstrun = True
+    ocount = 0
+    odictionary = {}
+
+    while True:
+
+        if firstrun:
+            firstrun = False
+        elif onceflag:
+            break
+        else:
+            time.sleep(30)
+
+        try:
+            if cflag:
+                uri = '/debugmem/count'
+            else:
+                uri = '/debugmem/types'
+
+            connection = httplib.HTTPConnection('127.0.0.1:9774')
+            connection.request('GET', uri)
+            response = connection.getresponse()
+            if response.status != 200:
+                continue
+
+            body = response.read()
+            response = json.loads(body)
+
+            #
+            # Count active objects
+            #
+
+            if cflag:
+                count = response['len_gc_objects']
+                sys.stdout.write('%d\n' % (count - ocount))
+                if rflag or not ocount:
+                    ocount = count
+                continue
+
+            #
+            # List active objects
+            #
+
+            dictionary = response
+            result = {}
+
+            keys = set(dictionary.keys()) | set(odictionary.keys())
+            for key in keys:
+                if key in dictionary and key in odictionary:
+                    diff = dictionary[key] - odictionary[key]
+                    if diff:
+                        result[key] = diff
+                elif key in odictionary:
+                    result[key] = - odictionary[key]
+                elif key in dictionary:
+                    result[key] = dictionary[key]
+
+            json.dump(result, sys.stdout, indent=4)
+            sys.stdout.write('\n')
+            if not onceflag:
+                sys.stdout.write('======\n')
+
+            if rflag or not odictionary:
+                odictionary = dictionary
+
+        except:
+            pass
+
+if __name__ == '__main__':
+    main()

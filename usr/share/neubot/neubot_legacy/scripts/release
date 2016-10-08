@@ -1,0 +1,89 @@
+#!/bin/sh -e
+
+#
+# Copyright (c) 2010
+#     Nexa Center for Internet & Society, Politecnico di Torino (DAUIN)
+#     and Simone Basso <bassosimone@gmail.com>
+#
+# This file is part of Neubot <http://www.neubot.org/>.
+#
+# Neubot is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# Neubot is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Neubot.  If not, see <http://www.gnu.org/licenses/>.
+#
+
+#
+# Make sure there is not garbage around
+#
+./scripts/cleanup
+
+NOCOMMIT=0
+if [ "$1" = "-n" ]; then
+    NOCOMMIT=1
+    shift
+fi
+
+#
+# Get current version number
+# Note: the two char classes below contain a space and a tab
+#
+CURRENT=`grep ^VERSION Makefile | sed 's/^VERSION[ 	]*=[ 	]*//'`
+CURRENT_MAJOR=`echo $CURRENT | cut -d. -f1`
+CURRENT_MINOR=`echo $CURRENT | cut -d. -f2`
+CURRENT_PATCH=`echo $CURRENT | cut -d. -f3`
+
+#
+# Compute new version number
+#
+if [ $# -eq 1 ]; then
+    NEW=$1
+else
+    printf "Usage: %s [-n] new-version\n" $0 1>&2
+    exit 1
+fi
+
+# Update the ChangeLog
+./scripts/update_changelog $CURRENT $NEW
+
+#
+# Update the numeric representation first because
+# utils_version.py has the current canonical version
+# number written into its code.  So if we update
+# the canonical repr first the code below would
+# not work.
+#
+PATTERN=$(python neubot/utils_version.py)
+NEW_NUMERIC=$(python neubot/utils_version.py $NEW)
+FILES=`grep -Rn $PATTERN *|grep -v ^ChangeLog|awk -F: '{print $1}'|sort -u`
+for FILE in $FILES; do
+    ./scripts/sed_inplace s/$PATTERN/$NEW_NUMERIC/g $FILE
+done
+
+#
+# Update version number.
+# Make sure we don't touch the ChangeLog.
+# We don't assume `sed -i' is valid.
+#
+PATTERN=`./scripts/new_version.py $CURRENT`
+FILES=`grep -Rn $PATTERN *|grep -v ^ChangeLog|awk -F: '{print $1}'|sort -u`
+for FILE in $FILES; do
+    ./scripts/sed_inplace s/$PATTERN/$NEW/g $FILE
+done
+
+#
+# Commit
+#
+if [ $NOCOMMIT != 0 ]; then
+    exit 0
+fi
+git commit -a -m "Neubot/$NEW released"
+git tag $NEW

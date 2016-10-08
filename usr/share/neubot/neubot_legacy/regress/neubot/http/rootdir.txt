@@ -1,0 +1,8 @@
+neubot/background_api.py:    conf['http.server.rootdir'] = utils_hier.WWWDIR
+neubot/http/server.py:        "http.server.rootdir": "Root directory for static pages",
+neubot/http/server.py:        conf["http.server.rootdir"] = os.path.abspath(".")
+neubot/http/server.py:        rootdir = self.conf.get("http.server.rootdir", "")
+neubot/http/server.py:    "http.server.rootdir": "",
+neubot/http/server.py:    if conf["http.server.rootdir"] == ".":
+neubot/rendezvous/server.py:        conf["http.server.rootdir"] = ""
+neubot/server.py:    conf["http.server.rootdir"] = ""

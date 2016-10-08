@@ -1,0 +1,20 @@
+Speedtest negotiator
+''''''''''''''''''''
+
+:Version: 1.2 of 2011/11/18
+:Authors: Simone Basso
+:Documents: neubot/negotiate/server_speedtest.py
+
+This document briefly explains how the Speedtest test negotiator
+interfaces with the generic negotiator code.  For more information
+on the generic negotiator code, please refer to the documentation
+available at `doc/negotiate/server.txt`.
+
+In ``unchoke()``, Speedtest uses hash(stream) to map a stream to
+its unique identifier.  The identifier is installed in a global
+table and is returned to the client via the common code layer.
+
+Later, when the client runs the HTTP test, it will send the identifier
+in the 'Authorization' header.  Of course, the server checks such
+authorization against its global table and closes the connection if
+it is unknown.

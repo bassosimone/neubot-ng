@@ -1,0 +1,21 @@
+BitTorrent negotiator
+'''''''''''''''''''''
+
+:Version: 1.2 of 2011/11/18
+:Authors: Simone Basso
+:Documents: neubot/negotiate/server_bittorrent.py
+
+This document briefly explains how the BitTorrent test negotiator
+interfaces with the generic negotiator code.  For more information
+on the generic negotiator code, please refer to the documentation
+available at `doc/negotiate/server.txt`.
+
+In ``unchoke()``, BitTorrent uses str(hash(stream)) to map a stream to
+its unique identifier.  The SHA1 of the identifier is installed in a
+global table and the identifier is returned to the client via the common
+code layer.
+
+Later, when the client establishes and negotiates a BitTorrent
+connection with the server, it uses SHA1(identifier) to identify
+the torrent.  Of course, the server checks the SHA1 against its
+global table and closes the connection if the SHA1 is unknown.
