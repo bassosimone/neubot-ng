@@ -24,7 +24,7 @@ _LOCAL_STATE_DIR = os.path.join("var", "lib", "neubot")
 MEASUREMENTS_DB = os.path.join(_LOCAL_STATE_DIR, "measurements.sqlite")
 NETTESTS_DIR = os.path.join(_LOCAL_STATE_DIR, "nettests")
 SETTINGS_DB = os.path.join(_LOCAL_STATE_DIR, "settings.sqlite")
-SPECS_DIR = os.path.join(_CONF_DIR, "spec")
+SPECS_DIR = os.path.join(_CONF_DIR, "spec", os.name)
 
 DEFAULT_CONFIG = {
     "enabled": {
