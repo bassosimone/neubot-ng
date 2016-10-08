@@ -78,7 +78,7 @@ class DatabaseManager(object):
             # normal users.  In this case, mark the database as readonly since
             # write operation are going to raise exceptions.
             #
-            if not system.has_enough_privs():
+            if not system.has_enough_privs() and self.path != ":memory:":
                 logging.warning('database: opening database in readonly mode')
                 self.readonly = True
                 return self.dbc
