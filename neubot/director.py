@@ -75,7 +75,7 @@ class Director(object):
         """ Reads the specification of a test """
         spec = self.nettests.read_one(test_name)
         if not spec:
-            logging.warning("Cannot load nettest %s", test_name)
+            logging.warning("Cannot read nettest %s spec", test_name)
         return spec  # which is None on error
 
     def start_test(self, test_name, params):
