@@ -18,6 +18,13 @@ def load(spec, params):
 
     # TODO: add the possibility of specifying the default value
 
+    for variable_name in spec["params"]:
+        if "default_value" not in spec["params"][variable_name]:
+            continue
+        if variable_name in params:
+            continue
+        params[variable_name] = spec["params"][variable_name]["default_value"]
+
     for variable_name in params:
         if variable_name not in spec["params"]:
             logging.warning("No descriptor for: %s", variable_name)
