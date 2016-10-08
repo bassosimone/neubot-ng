@@ -9,6 +9,7 @@
 
 import logging
 import os
+import sys
 import uuid
 
 from .database.config import Config
@@ -24,7 +25,7 @@ _LOCAL_STATE_DIR = os.path.join("var", "lib", "neubot")
 MEASUREMENTS_DB = os.path.join(_LOCAL_STATE_DIR, "measurements.sqlite")
 NETTESTS_DIR = os.path.join(_LOCAL_STATE_DIR, "nettests")
 SETTINGS_DB = os.path.join(_LOCAL_STATE_DIR, "settings.sqlite")
-SPECS_DIR = os.path.join(_CONF_DIR, "spec", os.name)
+SPECS_DIR = os.path.join(_CONF_DIR, "spec", sys.platform)
 
 DEFAULT_CONFIG = {
     "enabled": {
