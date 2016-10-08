@@ -22,6 +22,11 @@ class ApiRunner(resource.Resource):
     state = None  # set to a State instance during configuration
     isLeaf = True
 
+    # XXX The v0.4.16.9 web-ui uses GET but POST would be more proper
+    def render_GET(self, request):
+        """ Called on GET /api/runner """
+        return self.render_POST(request)
+
     def render_POST(self, request):
         """ Called on POST /api/runner """
 
