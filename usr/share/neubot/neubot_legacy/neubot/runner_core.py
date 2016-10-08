@@ -32,9 +32,11 @@ import collections
 import getopt
 import sys
 import logging
+import os
 
 if __name__ == '__main__':
-    sys.path.insert(0, '.')
+    sys.path.insert(0, os.path.abspath(
+            os.path.dirname(os.path.dirname(__file__))))
 
 from neubot.net.poller import POLLER
 from neubot.speedtest.client import ClientSpeedtest
