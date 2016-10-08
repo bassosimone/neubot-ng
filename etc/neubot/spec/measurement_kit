@@ -1,9 +1,0 @@
-{
-    "command_line": "measurement_kit $test_name -vv",
-    "params": {
-        "test_name": {
-            "label": "MeasurementKit test name",
-            "regexp": "^[a-z_]+$"
-        }
-    }
-}

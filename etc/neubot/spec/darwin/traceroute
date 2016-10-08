@@ -1,0 +1,10 @@
+{
+    "command_line": "/usr/sbin/traceroute {domain}",
+    "params": {
+        "domain": {
+            "label": "Domain name to traceroute",
+            "regexp": "^[a-zA-Z0-9_.-]+$",
+            "default_value": "8.8.8.8"
+        }
+    }
+}

@@ -1,5 +1,5 @@
 {
-    "command_line": "wget -O/dev/null -d $url",
+    "command_line": "wget -O/dev/null -d {url}",
     "params": {
         "url": {
             "label": "URL to download",
