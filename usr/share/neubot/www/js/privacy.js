@@ -90,4 +90,6 @@ function privacy_init() {
     tracker.start();
 };
 
-
+jQuery(document).ready(function() {
+    i18n.translate(privacy_init);
+});

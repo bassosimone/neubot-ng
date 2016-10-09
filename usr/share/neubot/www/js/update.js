@@ -32,4 +32,6 @@ function update_init() {
     tracker.start();
 };
 
-
+jQuery(document).ready(function() {
+    i18n.translate(update_init);
+});

@@ -1,16 +1,27 @@
+/* neubot/www/js/index.js */
 /*-
+ * Copyright (c) 2010 Antonio Servetti <antonio.servetti@polito.it>,
+ *  Politecnico di Torino
+ *
+ * Copyright (c) 2010 Simone Basso <bassosimone@gmail.com>,
+ *  NEXA Center for Internet & Society at Politecnico di Torino
+ *
  * This file is part of Neubot <http://www.neubot.org/>.
  *
- * Neubot is free software. See AUTHORS and LICENSE for more
- * information on the copying conditions.
+ * Neubot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Neubot is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Neubot.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//
-// The "main" of Neubot web interface.
-//
-
-// TODO: move this function inside .ready() to
-// avoid polluting the function space
 function process_state(data) {
 
     var now = utils.getNow();
@@ -47,40 +58,18 @@ function process_state(data) {
     if (data.events.test_name) {
         jQuery("#testName").text(data.events.test_name);
     }
+
 }
 
-jQuery(document).ready(function() {
-    var section, link;
+function index_init() {
+    utils.setActiveTab("index");
 
-    // We need this to use jqplot.
     jQuery.jqplot.config.enablePlugins = true;
 
-    //
-    // This starts a function that runs periodically to
-    // track the state of the Neubot process.
-    //
-    tracker = state.tracker(function(){});
+    tracker = state.tracker(process_state);
     tracker.start();
+};
 
-    //
-    // By default load the status.html page
-    //
-    $("#content").load("status.html", function() {
-        utils.setActiveTab("status");
-        i18n.translate();
-    });
-
-    //
-    // Arrange things so that when we click on a button we
-    // change "tab" in the UX:
-    //
-    $(".sect").click(function () {
-        section = $(this).attr("id");
-        section = section.substring(0, section.indexOf("link"));
-        link = section + ".html";
-        $("#content").load(link, function () {
-            utils.setActiveTab(section);
-            i18n.translate();
-        });
-    });
-});        
+jQuery(document).ready(function() {
+    i18n.translate(index_init);
+});

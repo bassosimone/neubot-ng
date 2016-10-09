@@ -551,7 +551,7 @@ var results = (function () {
             data.until = Math.ceil(until / 1000);
         }
         jQuery.ajax({
-            url: utils.makeURL('/api/data'),
+            url: '/api/data',
             data: data,
             success: function (data) {
                 jQuery("#charts").html("");
@@ -638,7 +638,7 @@ var results = (function () {
 
     function call_api_results(data) {
         jQuery.ajax({
-            url: utils.makeURL("/api/results"),
+            url: "/api/results",
             data: data,
             dataType: 'json',
             success: handle_api_results
@@ -673,4 +673,7 @@ var results = (function () {
 
 }());
 
-
+jQuery(document).ready(function () {
+    /*"use strict";*/  // Only when running jslint
+    i18n.translate(results.init);
+});

@@ -33,6 +33,21 @@ DEFAULT_CONFIG = {
         "default_value": 1,
         "label": "Whether automatic tests are enabled"
     },
+    "privacy.informed": {
+        "cast": int,
+        "default_value": 0,
+        "label": "Whether you have read our privacy policy",
+    },
+    "privacy.can_collect": {
+        "cast": int,
+        "default_value": 0,
+        "label": "Whether we can save measurement results",
+    },
+    "privacy.can_publish": {
+        "cast": int,
+        "default_value": 0,
+        "label": "Whether we can publish your measurements results",
+    },
     "uuid": {
         "cast": str,
         "default_value": str(uuid.uuid4()),

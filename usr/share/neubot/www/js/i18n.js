@@ -22,6 +22,9 @@
 var LANG = {};
 
 var i18n = {
+    languages: {
+        it: 'Italian'
+    },
 
     get: function(label) {
         if (LANG[label]) {
@@ -34,29 +37,24 @@ var i18n = {
 
     getLanguageInUse: function() {
         var lang = undefined;
-
         jQuery.ajax({
-            url: utils.makeURL('/api/config'),
+            url: '/api/config',
             data: {},
             type: 'GET',
             dataType: 'json',
-            error: function() {
-                return;
-            },
             success: function(data) {
                 lang = data['www.lang'];
-            }
+            },
+            async: false
         });
-
         if (!lang || lang == 'default') {
             if (navigator.userLanguage) {
-                lang = navigator.userLanguage.toLowerCase().substring(0,2);
+                lang = navigator.userLanguage.toLowerCase();
             }
             else if (navigator.language) {
-                lang = navigator.language.toLowerCase().substring(0,2);
+                lang = navigator.language.toLowerCase();
             }
         }
-
         return lang;
     },
 
@@ -78,22 +76,23 @@ var i18n = {
         });
     },
 
-    translate: function() {
-
+    translate: function(init_caller) {
         var lang = this.getLanguageInUse();
+        if (!lang || !this.languages[lang]) {
+            jQuery(".i18n").css("visibility", "visible");
+            init_caller();
+            return;
+        }
 
         jQuery.ajax({
             url: "lang/" + lang + ".js",
             dataType: 'script',
             context: this,
-            error: function () {
-                jQuery(".i18n").css("visibility", "visible");
-            },
             success: function(data) {
                 this.translate_page(data, /^(i18n_.*)$/i);
                 jQuery(".i18n").css("visibility", "visible");
+                init_caller();
             }
         });
     }
 };
-

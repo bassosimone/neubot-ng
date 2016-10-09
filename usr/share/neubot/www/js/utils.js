@@ -157,10 +157,6 @@ var utils = (function() {
         return self.getSetConfigVars(success, true, value, error);
     }
 
-    self.makeURL = function(path) {
-        return "http://127.0.0.1:9774" + path;  // TODO: make this configurable
-    };
-
     self.getSetConfigVars = function(myfunction, change, value, myerror) {
         var data = {};
         var type = "GET";
@@ -185,7 +181,7 @@ var utils = (function() {
         }
 
         jQuery.ajax({
-            url: self.makeURL('/api/config'),
+            url: '/api/config',
             data: data,
             type: type,
             dataType: 'json',
@@ -206,23 +202,13 @@ var utils = (function() {
         };
 
         jQuery.ajax({
-            url: self.makeURL('/api/runner'),
+            url: '/api/runner',
             data: {test: jQuery('#select_startnow').val()},
             type: 'GET',
             dataType: 'json',
             success: success,
             error: error
         });
-    }
-
-    self.makeURL = function (path) { 
-        
-        if (path.indexOf("/") != 0) {
-            path = "/" + path;
-
-        }
- 
-        return "http://127.0.0.1:9774" + path;
     }
 
     return self;

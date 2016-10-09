@@ -23,7 +23,7 @@ function log_init() {
     utils.setActiveTab("log");
 
     jQuery.ajax({
-        url: utils.makeURL('api/log'),
+        url: 'api/log',
         dataType: 'json',
         success: function(data) {
             var html = "";
@@ -64,4 +64,6 @@ function log_init() {
     tracker.start();
 };
 
-
+jQuery(document).ready(function() {
+    i18n.translate(log_init)
+});
